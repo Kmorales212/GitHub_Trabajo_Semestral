@@ -57,5 +57,13 @@ public class ProductoController {
         repo.put(id, existente);
         return ResponseEntity.ok(existente);
     }
-
+    
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable int id) {
+        ProductoModel removed = repo.remove(id);
+        if (removed == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
 }
