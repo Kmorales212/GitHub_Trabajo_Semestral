@@ -33,5 +33,15 @@ public class ProductoController {
         }
         return ResponseEntity.ok(p);
     }
+    
+    @PostMapping("/crear")
+    public ResponseEntity<ProductoModel> crear(@RequestBody ProductoModel producto) {
+        int id = idGenerator.getAndIncrement();
+        producto.setId(id);
+        repo.put(id, producto);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/productos/" + id));
+        return new ResponseEntity<>(producto, headers, HttpStatus.CREATED);
+    }
 
 }
