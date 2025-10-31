@@ -33,7 +33,7 @@ public class ProductoController {
         }
         return ResponseEntity.ok(p);
     }
-    
+
     @PostMapping("/crear")
     public ResponseEntity<ProductoModel> crear(@RequestBody ProductoModel producto) {
         int id = idGenerator.getAndIncrement();
@@ -42,6 +42,20 @@ public class ProductoController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/productos/" + id));
         return new ResponseEntity<>(producto, headers, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<ProductoModel> actualizar(@PathVariable int id, @RequestBody ProductoModel producto) {
+        ProductoModel existente = repo.get(id);
+        if (existente == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        existente.setNombre(producto.getNombre());
+        existente.setPrecio(producto.getPrecio());
+        existente.setDescripcion(producto.getDescripcion());
+        repo.put(id, existente);
+        return ResponseEntity.ok(existente);
     }
 
 }
